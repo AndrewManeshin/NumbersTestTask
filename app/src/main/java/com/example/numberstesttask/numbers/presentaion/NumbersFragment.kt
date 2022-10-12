@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.numberstesttask.R
 import com.example.numberstesttask.details.presentation.DetailsFragment
@@ -14,7 +15,7 @@ import com.example.numberstesttask.main.presentaion.ShowFragment
 
 class NumbersFragment : Fragment() {
 
-    private var showFragment: ShowFragment =  ShowFragment.Empty()
+    private var showFragment: ShowFragment = ShowFragment.Empty()
 
     override fun onAttach(context: Context) {
         showFragment = context as ShowFragment
@@ -32,14 +33,18 @@ class NumbersFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         view.findViewById<ProgressBar>(R.id.progressBar).visibility = View.GONE
-//todo refactor amd remove hardcode
+        //todo refactor amd remove hardcode
         view.findViewById<Button>(R.id.getFactButton).setOnClickListener {
             showFragment?.show(DetailsFragment.newInstance("some information about the random number hardcoded"))
+        }
+
+        view.findViewById<Button>(R.id.getRandomFactButton).setOnClickListener {
+            Toast.makeText(context, "Get random fact", Toast.LENGTH_SHORT).show()
         }
     }
 
     override fun onDetach() {
-        showFragment =  ShowFragment.Empty()
+        showFragment = ShowFragment.Empty()
         super.onDetach()
     }
 }

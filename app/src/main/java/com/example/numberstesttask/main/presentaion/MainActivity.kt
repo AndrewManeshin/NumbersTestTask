@@ -31,6 +31,7 @@ class MainActivity : AppCompatActivity(), ShowFragment {
         } else {
             transaction.replace(container, NumbersFragment())
         }
+        transaction.commit()
     }
 }
 

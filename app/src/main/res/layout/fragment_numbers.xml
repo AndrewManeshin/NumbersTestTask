@@ -31,14 +31,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin_small"
-        tools:text="@string/get_fact" />
+        android:text="@string/get_fact" />
 
     <Button
         android:id="@+id/getRandomFactButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin_small"
-        tools:text="@string/get_random_fact" />
+        android:text="@string/get_random_fact" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/historyRecyclerView"
