@@ -37,13 +37,17 @@ class NumbersViewModelTest : BaseTest() {
         communications = TestNumbersCommunications()
         interactor = TestNumbersInteractor()
         manageResources = TestManageResources()
+        val handleNumbersRequest = HandleNumbersRequest.Base(
+            TestDispatchersList(),
+            communications,
+            NumbersResultMapper(communications, NumberUiMapper())
+        )
         //1. initialize
         viewModel = NumbersViewModel(
-            TestDispatchersList(),
+            handleNumbersRequest,
             manageResources,
             communications,
             interactor,
-            NumbersResultMapper(communications, NumberUiMapper()),
         )
     }
 
@@ -132,7 +136,10 @@ class NumbersViewModelTest : BaseTest() {
         assertEquals(true, communications.progressCalledList[0])
 
         assertEquals(1, interactor.fetchAboutNumberCalledList.size)
-        assertEquals(NumbersResult.Success(listOf(NumberFact("45", "fact about 45"))), interactor.fetchAboutNumberCalledList[0])
+        assertEquals(
+            NumbersResult.Success(listOf(NumberFact("45", "fact about 45"))),
+            interactor.fetchAboutNumberCalledList[0]
+        )
 
         assertEquals(2, communications.progressCalledList.size)
         assertEquals(false, communications.progressCalledList[1])

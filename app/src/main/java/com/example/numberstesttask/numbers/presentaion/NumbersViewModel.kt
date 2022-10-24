@@ -10,11 +10,10 @@ import com.example.numberstesttask.numbers.domain.NumbersResult
 import kotlinx.coroutines.launch
 
 class NumbersViewModel(
-    private val dispatchers: DispatchersList,
+    private val handleResult: HandleNumbersRequest,
     private val manageResources: ManageResources,
     private val communications: NumbersCommunications,
     private val interactor: NumbersInteractor,
-    private val numbersResultMapper: NumbersResult.Mapper<Unit>,
 ) : ViewModel(), ObserveNumbers, FetchNumbers {
 
 
@@ -32,35 +31,25 @@ class NumbersViewModel(
 
     override fun init(isFirsRun: Boolean) {
         if (isFirsRun) {
-            communications.showProgress(true)
-            viewModelScope.launch(dispatchers.io()) {
-                val result = interactor.init()
-                communications.showProgress(false)
-                result.map(numbersResultMapper)
+            handleResult.handle(viewModelScope) {
+                interactor.init()
             }
         }
     }
 
     override fun fetchRandomNumberFact() {
-        communications.showProgress(true)
-        viewModelScope.launch(dispatchers.io()) {
-            val result = interactor.factAboutRandomNumber()
-            communications.showProgress(false)
-            result.map(numbersResultMapper)
+        handleResult.handle(viewModelScope) {
+            interactor.factAboutRandomNumber()
         }
     }
 
     override fun fetchNumberFact(number: String) {
         if (number.isEmpty())
             communications.showState(UiState.Error(manageResources.string(R.string.empty_number_error_message)))
-        else {
-            communications.showProgress(true)
-            viewModelScope.launch(dispatchers.io()) {
-                val result = interactor.factAboutNumber(number)
-                communications.showProgress(false)
-                result.map(numbersResultMapper)
+        else
+            handleResult.handle(viewModelScope) {
+                interactor.factAboutNumber(number)
             }
-        }
     }
 }
 
