@@ -166,7 +166,7 @@ internal class BaseNumbersRepositoryTest {
                 throw UnknownHostException()
         }
 
-        override suspend fun randomNumberFact(): NumberData {
+        override suspend fun randomNumber(): NumberData {
             randomNumberFactCalledCount++
             return if (thereIsConnection)
                 numberData

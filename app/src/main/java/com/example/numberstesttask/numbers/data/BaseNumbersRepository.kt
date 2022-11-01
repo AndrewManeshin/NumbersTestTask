@@ -26,6 +26,6 @@ class BaseNumbersRepository(
     }
 
     override suspend fun randomNumberFact() = handleDataRequest.handle {
-        cloudDataSource.randomNumberFact()
+        cloudDataSource.randomNumber()
     }
 }
