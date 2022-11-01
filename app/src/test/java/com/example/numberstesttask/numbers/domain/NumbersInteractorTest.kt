@@ -131,14 +131,14 @@ internal class NumbersInteractorTest {
             numberFactCalledList.add(number)
             allNumbers.add(numberFact)
             if (errorWhileNumberFact)
-                throw DomainException.NoConnectionException()
+                throw DomainException.NoInternetConnection()
             return numberFact
         }
 
         override suspend fun randomNumberFact(): NumberFact {
             randomNumberFactCalledList.add("")
             if (errorWhileNumberFact)
-                throw DomainException.NoConnectionException()
+                throw DomainException.NoInternetConnection()
             allNumbers.add(numberFact)
             return numberFact
         }
