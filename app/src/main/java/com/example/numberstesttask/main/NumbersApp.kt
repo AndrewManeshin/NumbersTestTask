@@ -2,7 +2,7 @@ package com.example.numberstesttask.main
 
 import android.app.Application
 import com.example.numberstesttask.BuildConfig
-import com.example.numberstesttask.numbers.data.CloudModule
+import com.example.numberstesttask.numbers.data.cloud.CloudModule
 import kotlinx.coroutines.DelicateCoroutinesApi
 
 class NumbersApp : Application() {

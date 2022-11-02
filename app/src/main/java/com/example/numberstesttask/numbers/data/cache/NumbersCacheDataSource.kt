@@ -1,4 +1,7 @@
-package com.example.numberstesttask.numbers.data
+package com.example.numberstesttask.numbers.data.cache
+
+import com.example.numberstesttask.numbers.data.NumberData
+import com.example.numberstesttask.numbers.data.cloud.FetchNumber
 
 interface NumbersCacheDataSource : FetchNumber {
 

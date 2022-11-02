@@ -1,5 +1,7 @@
 package com.example.numberstesttask.numbers.data
 
+import com.example.numberstesttask.numbers.data.cache.NumbersCacheDataSource
+import com.example.numberstesttask.numbers.data.cloud.NumbersCloudDataSource
 import com.example.numberstesttask.numbers.domain.DomainException
 import com.example.numberstesttask.numbers.domain.NumberFact
 import com.example.numberstesttask.numbers.domain.NumbersRepository

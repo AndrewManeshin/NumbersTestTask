@@ -1,4 +1,4 @@
-package com.example.numberstesttask.numbers.data
+package com.example.numberstesttask.numbers.data.cloud
 
 import retrofit2.Response
 import retrofit2.http.GET

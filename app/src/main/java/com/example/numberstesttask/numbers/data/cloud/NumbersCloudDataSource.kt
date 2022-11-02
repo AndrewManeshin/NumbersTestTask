@@ -1,4 +1,6 @@
-package com.example.numberstesttask.numbers.data
+package com.example.numberstesttask.numbers.data.cloud
+
+import com.example.numberstesttask.numbers.data.NumberData
 
 interface NumbersCloudDataSource : FetchNumber {
     suspend fun randomNumber(): NumberData
