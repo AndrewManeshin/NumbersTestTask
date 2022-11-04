@@ -2,20 +2,24 @@ package com.example.numberstesttask.numbers.presentaion
 
 import android.content.Context
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ProgressBar
-import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.RecyclerView
 import com.example.numberstesttask.R
-import com.example.numberstesttask.details.presentation.DetailsFragment
 import com.example.numberstesttask.main.presentaion.ShowFragment
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 
 class NumbersFragment : Fragment() {
 
     private var showFragment: ShowFragment = ShowFragment.Empty()
+    private lateinit var viewModel: NumbersViewModel //todo init viewModel
 
     override fun onAttach(context: Context) {
         showFragment = context as ShowFragment
@@ -32,19 +36,60 @@ class NumbersFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        view.findViewById<ProgressBar>(R.id.progressBar).visibility = View.GONE
-        //todo refactor amd remove hardcode
-        view.findViewById<Button>(R.id.getFactButton).setOnClickListener {
-            showFragment?.show(DetailsFragment.newInstance("some information about the random number hardcoded"))
+
+        val progressBar = view.findViewById<ProgressBar>(R.id.progressBar)
+        val factButton = view.findViewById<Button>(R.id.getFactButton)
+        val randomButton = view.findViewById<Button>(R.id.getRandomFactButton)
+        val recyclerView = view.findViewById<RecyclerView>(R.id.historyRecyclerView)
+        val inputLayout = view.findViewById<TextInputLayout>(R.id.inputLayout)
+        val inputEditText = view.findViewById<TextInputEditText>(R.id.inputEditText)
+        val adapter = NumbersAdapter(object : ClickListener {
+            override fun click(item: NumberUi) {
+                //todo move to next screen
+                //showFragment?.show(DetailsFragment.newInstance("some information about the random number hardcoded"))
+            }
+        })
+
+        recyclerView.adapter = adapter
+
+        inputEditText.addTextChangedListener(object : SimpleTextWatcher() {
+            override fun afterTextChanged(s: Editable?) {
+                super.afterTextChanged(s)
+                viewModel.clearError()
+            }
+        })
+
+        factButton.setOnClickListener {
+            viewModel.fetchNumberFact(inputEditText.text.toString())
         }
 
-        view.findViewById<Button>(R.id.getRandomFactButton).setOnClickListener {
-            Toast.makeText(context, "Get random fact", Toast.LENGTH_SHORT).show()
+        randomButton.setOnClickListener {
+            viewModel.fetchRandomNumberFact()
         }
+
+        viewModel.observeState(this) {
+            it.apply(inputLayout, inputEditText)
+        }
+
+        viewModel.observeList(this) {
+            adapter.map(it)
+        }
+
+        viewModel.observeProgress(this) {
+            progressBar.visibility = it
+        }
+
+        viewModel.init(savedInstanceState == null)
     }
 
     override fun onDetach() {
         showFragment = ShowFragment.Empty()
         super.onDetach()
     }
+}
+
+abstract class SimpleTextWatcher : TextWatcher {
+    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
+    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit
+    override fun afterTextChanged(s: Editable?) = Unit
 }
