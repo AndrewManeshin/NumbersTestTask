@@ -7,14 +7,14 @@ import retrofit2.converter.scalars.ScalarsConverterFactory
 
 interface CloudModule {
 
-    fun <T> service(classz: Class<T>): T
+    fun <T> service(clazz: Class<T>): T
 
     abstract class Abstract : CloudModule {
 
         protected abstract val level: HttpLoggingInterceptor.Level
         protected open val baseUrl = "http://numbersapi.com/"
 
-        override fun <T> service(classz: Class<T>): T {
+        override fun <T> service(clazz: Class<T>): T {
             //todo refactor when service locator
             val interceptor = HttpLoggingInterceptor().apply {
                 setLevel(level)
@@ -27,7 +27,7 @@ interface CloudModule {
                 .baseUrl(baseUrl)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build()
-            return retrofit.create(classz)
+            return retrofit.create(clazz)
         }
     }
 

@@ -5,8 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
-    android:background="@color/white"
-    android:textColor="@color/black"
+    style="@style/Base.Widget.AppCompat.TextView.Details"
     android:padding="@dimen/margin_small"
-    android:textAppearance="@style/TextAppearance.AppCompat.Title"
     tools:text="some details of the number" />

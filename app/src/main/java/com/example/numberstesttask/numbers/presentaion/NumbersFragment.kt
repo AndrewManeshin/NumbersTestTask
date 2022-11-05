@@ -12,7 +12,9 @@ import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.example.numberstesttask.R
+import com.example.numberstesttask.details.presentation.DetailsFragment
 import com.example.numberstesttask.main.presentaion.ShowFragment
+import com.example.numberstesttask.main.sl.ProvideViewModel
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 
@@ -24,6 +26,14 @@ class NumbersFragment : Fragment() {
     override fun onAttach(context: Context) {
         showFragment = context as ShowFragment
         super.onAttach(context)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel = (requireActivity() as ProvideViewModel).provideViewModel(
+            NumbersViewModel::class.java,
+            this
+        )
     }
 
     override fun onCreateView(
@@ -43,10 +53,10 @@ class NumbersFragment : Fragment() {
         val recyclerView = view.findViewById<RecyclerView>(R.id.historyRecyclerView)
         val inputLayout = view.findViewById<TextInputLayout>(R.id.inputLayout)
         val inputEditText = view.findViewById<TextInputEditText>(R.id.inputEditText)
+        val mapper = DetailsUi()
         val adapter = NumbersAdapter(object : ClickListener {
             override fun click(item: NumberUi) {
-                //todo move to next screen
-                //showFragment?.show(DetailsFragment.newInstance("some information about the random number hardcoded"))
+                showFragment.show(DetailsFragment.newInstance(item.map(mapper)))
             }
         })
 
