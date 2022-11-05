@@ -1,6 +1,6 @@
 package com.example.numberstesttask
 
-import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.Espresso.*
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -8,6 +8,8 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
+import androidx.test.uiautomator.UiDevice
 import com.example.numberstesttask.main.presentaion.MainActivity
 import org.junit.Rule
 import org.junit.Test
@@ -21,6 +23,7 @@ class NavigationTest {
     @Test
     fun details_navigation() {
         onView(withId(R.id.inputEditText)).perform(typeText("10"))
+        closeSoftKeyboard()
         onView(withId(R.id.getFactButton)).perform(click())
 
         onView(withId(R.id.titleTextView)).check(matches(withText("10")))
@@ -29,5 +32,9 @@ class NavigationTest {
         onView(withId(R.id.titleTextView)).perform(click())
 
         onView(withId(R.id.detailsTextView)).check(matches(withText("10\n\nfact about 10")))
+
+        pressBack()
+        onView(withId(R.id.titleTextView)).check(matches(withText("10")))
+        onView(withId(R.id.subtitleTextView)).check(matches(withText("fact about 10")))
     }
 }
