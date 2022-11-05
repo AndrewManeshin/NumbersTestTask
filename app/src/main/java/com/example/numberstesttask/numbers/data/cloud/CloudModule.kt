@@ -9,33 +9,32 @@ interface CloudModule {
 
     fun <T> service(clazz: Class<T>): T
 
-    abstract class Abstract : CloudModule {
-
-        protected abstract val level: HttpLoggingInterceptor.Level
-        protected open val baseUrl = "http://numbersapi.com/"
+    class Mock : CloudModule {
 
         override fun <T> service(clazz: Class<T>): T {
-            //todo refactor when service locator
+            return MockNumbersService() as T
+        }
+    }
+
+    class Base : CloudModule {
+
+        override fun <T> service(clazz: Class<T>): T {
             val interceptor = HttpLoggingInterceptor().apply {
-                setLevel(level)
+                setLevel(HttpLoggingInterceptor.Level.BODY)
             }
             val client = OkHttpClient.Builder()
                 .addInterceptor(interceptor)
                 .build()
             val retrofit = Retrofit.Builder()
                 .client(client)
-                .baseUrl(baseUrl)
+                .baseUrl(BASE_URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build()
             return retrofit.create(clazz)
         }
-    }
 
-    class Debug : Abstract() {
-        override val level = HttpLoggingInterceptor.Level.BODY
-    }
-
-    class Release : Abstract() {
-        override val level = HttpLoggingInterceptor.Level.NONE
+        companion object {
+            private const val BASE_URL = "http://numbersapi.com/"
+        }
     }
 }

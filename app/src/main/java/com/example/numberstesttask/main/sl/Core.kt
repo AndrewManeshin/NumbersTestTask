@@ -2,7 +2,6 @@ package com.example.numberstesttask.main.sl
 
 import android.content.Context
 import com.example.numberstesttask.numbers.data.cache.CacheModule
-import com.example.numberstesttask.numbers.data.cache.NumbersDatabase
 import com.example.numberstesttask.numbers.data.cloud.CloudModule
 import com.example.numberstesttask.numbers.presentaion.DispatchersList
 import com.example.numberstesttask.numbers.presentaion.ManageResources
@@ -23,9 +22,9 @@ interface Core : CloudModule, CacheModule, ManageResources {
         }
         private val cloudModule by lazy {
             if (isRelease)
-                CloudModule.Debug()
+                CloudModule.Base()
             else
-                CloudModule.Release()
+                CloudModule.Mock()
         }
 
         private val cacheModule by lazy {
