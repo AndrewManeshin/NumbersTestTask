@@ -6,7 +6,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelStoreOwner
 import com.example.numberstesttask.R
-import com.example.numberstesttask.details.presentation.DetailsFragment
 import com.example.numberstesttask.main.sl.ProvideViewModel
 import com.example.numberstesttask.numbers.presentaion.NumbersFragment
 
@@ -37,8 +36,8 @@ class MainActivity : AppCompatActivity(), ShowFragment, ProvideViewModel {
         transaction.commit()
     }
 
-    override fun <T : ViewModel> provideViewModel(clasz: Class<T>, owner: ViewModelStoreOwner): T =
-        (application as ProvideViewModel).provideViewModel(clasz, owner)
+    override fun <T : ViewModel> provideViewModel(clazz: Class<T>, owner: ViewModelStoreOwner): T =
+        (application as ProvideViewModel).provideViewModel(clazz, owner)
 }
 
 interface ShowFragment {

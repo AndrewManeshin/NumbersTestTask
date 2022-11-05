@@ -21,7 +21,13 @@ import com.google.android.material.textfield.TextInputLayout
 class NumbersFragment : Fragment() {
 
     private var showFragment: ShowFragment = ShowFragment.Empty()
-    private lateinit var viewModel: NumbersViewModel //todo init viewModel
+
+    private lateinit var viewModel: NumbersViewModel
+    private lateinit var inputEditText: TextInputEditText
+
+    private val watcher = object : SimpleTextWatcher() {
+        override fun afterTextChanged(s: Editable?) = viewModel.clearError()
+    }
 
     override fun onAttach(context: Context) {
         showFragment = context as ShowFragment
@@ -52,7 +58,7 @@ class NumbersFragment : Fragment() {
         val randomButton = view.findViewById<Button>(R.id.getRandomFactButton)
         val recyclerView = view.findViewById<RecyclerView>(R.id.historyRecyclerView)
         val inputLayout = view.findViewById<TextInputLayout>(R.id.inputLayout)
-        val inputEditText = view.findViewById<TextInputEditText>(R.id.inputEditText)
+        inputEditText = view.findViewById(R.id.inputEditText)
         val mapper = DetailsUi()
         val adapter = NumbersAdapter(object : ClickListener {
             override fun click(item: NumberUi) {
@@ -61,13 +67,6 @@ class NumbersFragment : Fragment() {
         })
 
         recyclerView.adapter = adapter
-
-        inputEditText.addTextChangedListener(object : SimpleTextWatcher() {
-            override fun afterTextChanged(s: Editable?) {
-                super.afterTextChanged(s)
-                viewModel.clearError()
-            }
-        })
 
         factButton.setOnClickListener {
             viewModel.fetchNumberFact(inputEditText.text.toString())
@@ -90,6 +89,16 @@ class NumbersFragment : Fragment() {
         }
 
         viewModel.init(savedInstanceState == null)
+    }
+
+    override fun onResume() {
+        inputEditText.addTextChangedListener(watcher)
+        super.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        inputEditText.removeTextChangedListener(watcher)
     }
 
     override fun onDetach() {

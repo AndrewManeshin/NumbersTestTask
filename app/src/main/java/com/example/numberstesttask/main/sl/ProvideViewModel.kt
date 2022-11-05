@@ -4,5 +4,5 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelStoreOwner
 
 interface ProvideViewModel {
-    fun <T: ViewModel>provideViewModel(clasz: Class<T>, owner: ViewModelStoreOwner): T
+    fun <T: ViewModel>provideViewModel(clazz: Class<T>, owner: ViewModelStoreOwner): T
 }
