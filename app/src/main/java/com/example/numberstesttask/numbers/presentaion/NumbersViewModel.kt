@@ -9,6 +9,7 @@ import com.example.numberstesttask.details.presentation.NumberDetailsFragment
 import com.example.numberstesttask.main.presentaion.Init
 import com.example.numberstesttask.main.presentaion.NavigationCommunication
 import com.example.numberstesttask.main.presentaion.NavigationStrategy
+import com.example.numberstesttask.main.presentaion.Screen
 import com.example.numberstesttask.numbers.domain.NumbersInteractor
 
 interface NumbersViewModel : Init, ObserveNumbers, FetchNumbers, ClearError {
@@ -65,7 +66,7 @@ interface NumbersViewModel : Init, ObserveNumbers, FetchNumbers, ClearError {
         override fun showDetails(item: NumberUi) {
             interactor.saveDetails(item.map(detailsMapper))
             navigationCommunication.map(
-                NavigationStrategy.Add(NumberDetailsFragment())
+                NavigationStrategy.Add(Screen.Details)
             )
         }
     }

@@ -13,7 +13,7 @@ class MainViewModelTest : BaseTest() {
 
         viewModel.init(true)
         assertEquals(1, navigation.count)
-        assertEquals(true, navigation.strategy is NavigationStrategy.Replace)
+        assertEquals(NavigationStrategy.Replace(Screen.Numbers), navigation.strategy)
 
         viewModel.init(false)
         assertEquals(1, navigation.count)

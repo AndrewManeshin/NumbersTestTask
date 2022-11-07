@@ -12,7 +12,7 @@ class MainViewModel(
 
     override fun init(isFirsRun: Boolean) {
         if (isFirsRun) {
-            navigationCommunication.map(NavigationStrategy.Replace(NumbersFragment()))
+            navigationCommunication.map(NavigationStrategy.Replace(Screen.Numbers))
         }
     }
 
