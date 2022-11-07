@@ -2,6 +2,8 @@ package com.example.numberstesttask.numbers.presentaion
 
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
+import com.example.numberstesttask.main.presentaion.NavigationCommunication
+import com.example.numberstesttask.main.presentaion.NavigationStrategy
 
 abstract class BaseTest {
 
@@ -30,5 +32,18 @@ abstract class BaseTest {
         override fun observeState(owner: LifecycleOwner, observer: Observer<UiState>) = Unit
 
         override fun observeList(owner: LifecycleOwner, observer: Observer<List<NumberUi>>) = Unit
+    }
+
+    protected class TestNavigationCommunication : NavigationCommunication.Mutable {
+
+        lateinit var strategy: NavigationStrategy
+        var count = 0
+
+        override fun observe(owner: LifecycleOwner, observer: Observer<NavigationStrategy>) = Unit
+
+        override fun map(source: NavigationStrategy) {
+            strategy = source
+            count++
+        }
     }
 }

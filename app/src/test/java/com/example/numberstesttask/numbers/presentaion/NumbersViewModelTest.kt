@@ -1,6 +1,7 @@
 package com.example.numberstesttask.numbers.presentaion
 
 import android.view.View
+import com.example.numberstesttask.main.presentaion.NavigationStrategy
 import com.example.numberstesttask.numbers.domain.NumberFact
 import com.example.numberstesttask.numbers.domain.NumberUiMapper
 import com.example.numberstesttask.numbers.domain.NumbersInteractor
@@ -16,6 +17,7 @@ import org.junit.Test
 
 class NumbersViewModelTest : BaseTest() {
 
+    private lateinit var navigation: TestNavigationCommunication
     private lateinit var viewModel: NumbersViewModel
     private lateinit var interactor: TestNumbersInteractor
     private lateinit var manageResources: TestManageResources
@@ -35,6 +37,7 @@ class NumbersViewModelTest : BaseTest() {
     fun init() {
         Dispatchers.setMain(mainThreadSurrogate)
 
+        navigation = TestNavigationCommunication()
         communications = TestNumbersCommunications()
         interactor = TestNumbersInteractor()
         manageResources = TestManageResources()
@@ -43,12 +46,14 @@ class NumbersViewModelTest : BaseTest() {
             communications,
             NumbersResultMapper(communications, NumberUiMapper())
         )
-        //1. initialize
-        viewModel = NumbersViewModel(
+        val detailsMapper = TestUiMapper()
+        viewModel = NumbersViewModel.Base(
             handleNumbersRequest,
             manageResources,
             communications,
             interactor,
+            navigation,
+            detailsMapper
         )
     }
 
@@ -111,7 +116,10 @@ class NumbersViewModelTest : BaseTest() {
         assertEquals(0, communications.progressCalledList.size)
 
         assertEquals(1, communications.stateCalledList.size)
-        assertEquals(UiState.ShowError("entered number is empty"), communications.stateCalledList[0])
+        assertEquals(
+            UiState.ShowError("entered number is empty"),
+            communications.stateCalledList[0]
+        )
 
         assertEquals(0, communications.timesShowList)
     }
@@ -160,6 +168,15 @@ class NumbersViewModelTest : BaseTest() {
         assertEquals(true, communications.stateCalledList[0] is UiState.ClearError)
     }
 
+    @Test
+    fun `test navigation details`() {
+        viewModel.showDetails(NumberUi("12", "fact about 12"))
+
+        assertEquals("12 fact about 12", interactor.details)
+        assertEquals(1, navigation.count)
+        assertEquals(true, navigation.strategy is NavigationStrategy.Add)
+    }
+
     private class TestManageResources : ManageResources {
 
         private var string = ""
@@ -174,10 +191,15 @@ class NumbersViewModelTest : BaseTest() {
     private class TestNumbersInteractor : NumbersInteractor {
 
         private var result: NumbersResult = NumbersResult.Success(emptyList())
+        var details = ""
 
         val initCalledList = mutableListOf<NumbersResult>()
         val fetchAboutNumberCalledList = mutableListOf<NumbersResult>()
         val fetchAboutRandomNumberCalledList = mutableListOf<NumbersResult>()
+
+        override fun saveDetails(details: String) {
+            this.details = details
+        }
 
         fun changeExpectedResult(newResult: NumbersResult) {
             result = newResult
@@ -202,5 +224,9 @@ class NumbersViewModelTest : BaseTest() {
     private class TestDispatchersList : DispatchersList {
         override fun io() = TestCoroutineDispatcher()
         override fun ui() = TestCoroutineDispatcher()
+    }
+
+    private class TestUiMapper : NumberUi.Mapper<String> {
+        override fun map(id: String, fact: String) = "$id $fact"
     }
 }

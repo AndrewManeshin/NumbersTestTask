@@ -18,9 +18,9 @@ import com.example.numberstesttask.numbers.presentaion.*
 
 class NumbersModule(
     private val core: Core
-) : Module<NumbersViewModel> {
+) : Module<NumbersViewModel.Base> {
 
-    override fun viewModel(): NumbersViewModel {
+    override fun viewModel(): NumbersViewModel.Base {
         val communication = NumbersCommunications.Base(
             ProgressCommunication.Base(),
             NumbersStateCommunication.Base(),
@@ -47,7 +47,7 @@ class NumbersModule(
             mapperToDomain
         )
 
-        return NumbersViewModel(
+        return NumbersViewModel.Base(
             HandleNumbersRequest.Base(
                 core.provideDispatchers(),
                 communication,
@@ -63,8 +63,11 @@ class NumbersModule(
                 HandleRequest.Base(
                     HandleError.Base(core),
                     repository
-                )
-            )
+                ),
+                core.provideNumberDetails()
+            ),
+            core.provideNavigation(),
+            DetailsUi()
         )
     }
 }

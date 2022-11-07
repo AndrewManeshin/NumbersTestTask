@@ -3,6 +3,7 @@ package com.example.numberstesttask.numbers.presentaion
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import com.example.numberstesttask.main.presentaion.SingleLiveEvent
 
 interface Communication {
 
@@ -40,4 +41,7 @@ interface Communication {
             liveData.postValue(source)
         }
     }
+
+    abstract class SingleUi<T> : Ui<T>(SingleLiveEvent())
+    abstract class SinglePost<T> : Post<T>(SingleLiveEvent())
 }

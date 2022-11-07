@@ -2,35 +2,26 @@ package com.example.numberstesttask.main.presentaion
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelStoreOwner
 import com.example.numberstesttask.R
 import com.example.numberstesttask.main.sl.ProvideViewModel
-import com.example.numberstesttask.numbers.presentaion.NumbersFragment
 
-class MainActivity : AppCompatActivity(), ShowFragment, ProvideViewModel {
+class MainActivity : AppCompatActivity(), ProvideViewModel {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        if (savedInstanceState == null)
-            NavigationStrategy.Replace(NumbersFragment()).navigate(supportFragmentManager, R.id.container)
-    }
+        val viewModel = provideViewModel(MainViewModel::class.java, this)
 
-    override fun show(fragment: Fragment) {
-        NavigationStrategy.Add(fragment).navigate(supportFragmentManager, R.id.container)
+        viewModel.observe(this) { strategy ->
+            strategy.navigate(supportFragmentManager, R.id.container)
+        }
+
+        viewModel.init(savedInstanceState == null)
     }
 
     override fun <T : ViewModel> provideViewModel(clazz: Class<T>, owner: ViewModelStoreOwner): T =
         (application as ProvideViewModel).provideViewModel(clazz, owner)
-}
-
-interface ShowFragment {
-    fun show(fragment: Fragment)
-
-    class Empty : ShowFragment {
-        override fun show(fragment: Fragment) = Unit
-    }
 }
