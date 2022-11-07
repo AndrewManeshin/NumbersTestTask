@@ -14,3 +14,4 @@ Main requirements programming language: Java/Kotlin, IDE - Android Studio; Queri
 
 ### Пример работы
 
+<img src="https://github.com/AndrewManeshin/NumbersTestTask/blob/master/sample_of_work.gif" width="270" height="585" />
